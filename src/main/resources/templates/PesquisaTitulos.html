@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="LayoutPadrao">
+
+<head>
+<title>Pesquisa de Títulos</title>
+</head>
+
+<body>
+
+	<div layout:fragment="conteudo">
+		<div layout:include="MensagemGeral"></div>
+		
+		<div class="panel panel-default">
+			<div class="panel-heading clearfix">
+				<h1 class="panel-title pull-left">Pesquisa de títulos</h1>
+				<a class="pull-right" href="/titulos/novo">Novo título</a>
+			</div>
+
+			<div class="panel-body">
+				<table class="table table-bordered table-striped">
+					<thead>
+						<tr>
+							<th class="text-center col-md-1">#</th>
+							<th>Descrição</th>
+							<th class="text-center col-md-2">Data de vencimento</th>
+							<th class="text-right col-md-2">Valor</th>
+							<th class="text-center col-md-2">Status</th>
+							<th class="col-md-1"></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="titulo : ${titulos}">
+							<td class="text-center col-md-1" th:text="${titulo.id}"></td>
+							<td th:text="${titulo.descricao}"></td>
+							<td class="text-center col-md-2" th:text="${{titulo.dataVencimento}}"></td>
+							<td class="text-right col-md-2" th:text="|R$ ${{titulo.valor}}|"></td>
+							<td class="text-center col-md-2">
+								<span class="label"
+									th:text="${titulo.status.descricao}"
+									th:classappend="${titulo.pendente ? 'label-danger' : 'label-success'}"></span>
+							</td>
+							<td class="text-center col-md-1">
+								<a class="btn btn-link btn-xs"
+									th:href="@{/titulos/{id}(id=${titulo.id})}"
+									title="Editar">
+									<span class="glyphicon glyphicon-pencil"></span>
+								</a>
+								<a class="btn btn-link btn-xs" data-toggle="modal"
+									data-target="#confirmacaoExclusaoModal"
+									title="Remover"
+									th:attr="data-id=${titulo.id}, data-descricao=${titulo.descricao}">
+									<span class="glyphicon glyphicon-remove"></span>
+								</a>
+							</td>
+						</tr>
+						<tr th:if="${#lists.isEmpty(titulos)}">
+							<td colspan="6">Nenhum registro encontrado</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		
+		<div layout:include="DialogoConfirmacaoExclusao"></div>
+	</div>
+</body>
+
+</html>
