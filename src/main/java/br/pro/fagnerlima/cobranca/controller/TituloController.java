@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
@@ -18,6 +17,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import br.pro.fagnerlima.cobranca.model.StatusTitulo;
 import br.pro.fagnerlima.cobranca.model.Titulo;
 import br.pro.fagnerlima.cobranca.repository.Titulos;
+import br.pro.fagnerlima.cobranca.service.CadastroTituloService;
 
 @Controller
 @RequestMapping("/titulos")
@@ -27,6 +27,9 @@ public class TituloController {
 	
 	@Autowired
 	private Titulos titulos;
+	
+	@Autowired
+	private CadastroTituloService cadastroTituloService;
 	
 	@RequestMapping
 	public ModelAndView pesquisar() {
@@ -52,12 +55,12 @@ public class TituloController {
 			return "CadastroTitulo";
 		
 		try {
-			titulos.save(titulo);
+			cadastroTituloService.salvar(titulo);
 			redirectAttributes.addFlashAttribute("mensagem", "Título salvo com sucesso.");
 			
 			return "redirect:/titulos/novo";
-		} catch (DataIntegrityViolationException e) {
-			errors.rejectValue("dataVencimento", null, "Formato de data inválido.");
+		} catch (IllegalArgumentException e) {
+			errors.rejectValue("dataVencimento", null, e.getMessage());
 			return CADASTRO_VIEW;
 		}
 	}
@@ -72,7 +75,7 @@ public class TituloController {
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public String excluir(@PathVariable Long id, RedirectAttributes redirectAttributes) {
-		titulos.delete(id);
+		cadastroTituloService.excluir(id);
 		redirectAttributes.addFlashAttribute("mensagem", "Título excluído com sucesso.");
 		
 		return "redirect:/titulos";
