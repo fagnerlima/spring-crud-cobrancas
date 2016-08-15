@@ -24,7 +24,7 @@
 					<thead>
 						<tr>
 							<th class="text-center col-md-1">#</th>
-							<th>Descrição</th>
+							<th class="col-md-3">Descrição</th>
 							<th class="text-center col-md-2">Data de vencimento</th>
 							<th class="text-right col-md-2">Valor</th>
 							<th class="text-center col-md-2">Status</th>
@@ -33,16 +33,15 @@
 					</thead>
 					<tbody>
 						<tr th:each="titulo : ${titulos}">
-							<td class="text-center col-md-1" th:text="${titulo.id}"></td>
+							<td class="text-center" th:text="${titulo.id}"></td>
 							<td th:text="${titulo.descricao}"></td>
-							<td class="text-center col-md-2" th:text="${{titulo.dataVencimento}}"></td>
-							<td class="text-right col-md-2" th:text="|R$ ${{titulo.valor}}|"></td>
-							<td class="text-center col-md-2">
-								<span class="label"
-									th:text="${titulo.status.descricao}"
+							<td class="text-center" th:text="${{titulo.dataVencimento}}"></td>
+							<td class="text-right" th:text="|R$ ${{titulo.valor}}|"></td>
+							<td class="text-center" th:attr="data-role=${titulo.id}">
+								<span class="label" th:text="${titulo.status.descricao}"
 									th:classappend="${titulo.pendente ? 'label-danger' : 'label-success'}"></span>
 							</td>
-							<td class="text-center col-md-1">
+							<td class="text-center">
 								<a class="btn btn-link btn-xs"
 									th:href="@{/titulos/{id}(id=${titulo.id})}"
 									title="Editar" rel="tooltip" data-placement="top">
@@ -53,6 +52,12 @@
 									title="Remover" rel="tooltip" data-placement="top"
 									th:attr="data-id=${titulo.id}, data-descricao=${titulo.descricao}">
 									<span class="glyphicon glyphicon-remove"></span>
+								</a>
+								<a class="btn btn-link btn-xs atualizar-status"
+									th:if="${titulo.pendente}" th:href="@{/titulos/{id}/receber(id=${titulo.id})}"
+									th:attr="data-id=${titulo.id}"
+									title="Receber" rel="tooltip" data-placement="top">
+									<span class="glyphicon glyphicon-check"></span>
 								</a>
 							</td>
 						</tr>
