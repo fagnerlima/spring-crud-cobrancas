@@ -17,7 +17,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import br.pro.fagnerlima.cobranca.model.StatusTitulo;
 import br.pro.fagnerlima.cobranca.model.Titulo;
-import br.pro.fagnerlima.cobranca.repository.Titulos;
 import br.pro.fagnerlima.cobranca.repository.filter.TituloFilter;
 import br.pro.fagnerlima.cobranca.service.CadastroTituloService;
 
